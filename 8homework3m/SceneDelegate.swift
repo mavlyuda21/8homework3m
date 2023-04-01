@@ -16,7 +16,48 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+        let window = UIWindow(windowScene: windowScene)
+        
+        let mainVC = MainViewController()
+        let mainBarItem = UITabBarItem(title: "Contacts", image: UIImage(systemName: "person.fill"),
+                                         selectedImage: UIImage(systemName: "person.fill"))
+        let recentBarItem = UITabBarItem(title: "Recents", image: UIImage(systemName: "clock.fill"),
+                                         selectedImage: UIImage(systemName: "clock.fill"))
+        let favoritesBarItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "star.fill"),
+                                         selectedImage: UIImage(systemName: "star.fill"))
+        let dialpadBarItem = UITabBarItem(title: "Dialpad", image: UIImage(systemName: "circle.grid.3x3"),
+                                         selectedImage: UIImage(systemName: "circle.grid.3x3.fill"))
+        let voicemailBarItem = UITabBarItem(title: "Voicemail", image: UIImage(systemName: "recordingtape"),
+                                         selectedImage: UIImage(systemName: "recordingtape"))
+        mainVC.tabBarItem = mainBarItem
+        let navigationController = UINavigationController(rootViewController: mainVC)
+        
+        let favoritesVC = EmptyViewController()
+        favoritesVC.tabBarItem = favoritesBarItem
+        
+        let recentVC = EmptyViewController()
+        recentVC.tabBarItem = recentBarItem
+        
+        let dialpadVC = EmptyViewController()
+        dialpadVC.tabBarItem = dialpadBarItem
+        
+        let voicemailVC = EmptyViewController()
+        voicemailVC.tabBarItem = voicemailBarItem
+        
+        let backItem = UIBarButtonItem()
+        backItem.title = "Contacts"
+        navigationController.navigationItem.backBarButtonItem = backItem
+        let tabbarController = UITabBarController()
+        tabbarController.viewControllers = [favoritesVC,recentVC,navigationController,dialpadVC,voicemailVC]
+        tabbarController.tabBar.backgroundColor = .systemGray6
+        tabbarController.selectedViewController = navigationController
+        window.rootViewController = tabbarController
+        tabbarController.tabBar.layer.cornerRadius = 24
+        tabbarController.tabBar.clipsToBounds = true
+        self.window = window
+        self.window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
